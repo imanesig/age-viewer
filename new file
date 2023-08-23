@@ -1,0 +1,75 @@
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Bar } from "react-chartjs-2";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+}));
+const AGEViewer = () => {
+  const classes = useStyles();
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("https://api.github.com/repos/apache/age-viewer/commits")
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, []);
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
+  return (
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader title="Commits per day" />
+            <Divider />
+            <CardContent>
+              <Bar data={data} options={options} />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader title="Contributors" />
+            <Divider />
+            <CardContent>
+              <Typography variant="body2">
+                List of contributors will be displayed here
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader title="Issues" />
+            <Divider />
+            <CardContent>
+              <Typography variant="body2">
+                List of issues will be displayed here
+              </Typography>
+            </CardContent>
+          </Card>
